@@ -18,5 +18,15 @@
       ></a-entity>
       <a-sky color="#555555"></a-sky>
     </a-scene>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+  const xrSession = sessionStorage.getItem('XRSession');
+  if (xrSession) {
+    const sceneEl = document.querySelector('a-scene');
+    sceneEl.renderer.xr.setSession(xrSession); // Resume the previous XRSession
+  }
+});
+
+    </script>
   </body>
 </html>

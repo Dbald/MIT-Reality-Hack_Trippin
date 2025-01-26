@@ -54,6 +54,20 @@
             message.parentNode.removeChild(message);
           }, 3000);
         });
+        let xrSession = null;
+
+document.querySelector('a-scene').addEventListener('enter-vr', () => {
+  const sceneEl = document.querySelector('a-scene');
+  xrSession = sceneEl.renderer.xr.getSession(); // Get the current XRSession
+});
+
+function navigateToScene(url) {
+  if (xrSession) {
+    sessionStorage.setItem('XRSession', xrSession); // Store the XRSession
+  }
+  window.location.href = url; // Redirect to the next scene
+}
+
     });
   </script>
 
