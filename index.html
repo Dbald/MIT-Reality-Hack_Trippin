@@ -12,10 +12,11 @@
   raycaster="objects:#objects *;">
     <a-assets>
       <a-asset-item id="home_screen" src="/assets/Home Screen.glb"></a-asset-item>
+      <img id="earth" src="/img/RenderCrate-HDRI_Orbital_68_prev_lg.jpg" />
     </a-assets>
     <!-- Camera w/ VR Controls -->
     <a-entity id="cameraRig" movement-controls="speed: 0.1">
-      <a-camera position="0 1.6 0" cursor="rayOrigin: mouse" look-controls="touchEnabled: true"raycaster="objects: .clickable; showLine:true;"></a-camera>
+      <a-camera position="0 1.6 0" cursor="rayOrigin: mouse" look-controls="touchEnabled: true"raycaster="objects: .clickable"></a-camera>
       <!-- Motion Controllers -->
       <!-- Left -->
       <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
@@ -30,7 +31,7 @@
 
       <a-gltf-model src="#home_screen" gltf-model="/assets/Home Screen.glb" position="0 247.75 0" scale="1.88 2.21102 1.88" rotation="0 185.84000000000003 0"></a-gltf-model>
 
-    <a-plane rotation="-90 0 0" width="100" height="100" color="#7BC8A4"></a-plane>
+    <a-sky src="#earth"></a-sky>
   </a-scene>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -54,20 +55,22 @@
             message.parentNode.removeChild(message);
           }, 3000);
         });
-        let xrSession = null;
+        document.querySelector('#elevatorButton').addEventListener('click', () => loadScene('elevator'));
+        function loadScene(sceneKey) {
+          const selectedScene = scenes[sceneKey];
+          if (!selectedScene) return;
 
-document.querySelector('a-scene').addEventListener('enter-vr', () => {
-  const sceneEl = document.querySelector('a-scene');
-  xrSession = sceneEl.renderer.xr.getSession(); // Get the current XRSession
-});
+          // Update the sky color
+          sky.setAttribute('color', selectedScene.skyColor);
 
-function navigateToScene(url) {
-  if (xrSession) {
-    sessionStorage.setItem('XRSession', xrSession); // Store the XRSession
-  }
-  window.location.href = url; // Redirect to the next scene
-}
+          // Clear the current content
+          scene.innerHTML = menu.outerHTML; // Keep the menu
+          const contentContainer = document.createElement('a-entity');
+          contentContainer.innerHTML = selectedScene.content;
+          scene.appendChild(contentContainer);
+        }
 
+        
     });
   </script>
 

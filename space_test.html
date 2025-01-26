@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+    <a-scene cursor__mouse="rayOrigin: mouse" cursor__xrselect="rayOrigin: xrselect" raycaster="objects:#objects *;">
+        <a-assets>
+            <a-asset-item id="home_screen" src="/assets/Home Screen.gltf"></a-asset-item>
+            <a-asset-item id="space" src="/assets/astrocrib_test.glb"></a-asset-item>
+            <img id="earth" src="/img/RenderCrate-HDRI_Orbital_68_prev_lg.jpg" />
+        </a-assets>
+
+        <!-- Camera w/ VR Controls -->
+        <a-entity id="cameraRig" movement-controls="speed: 0.1">
+            <a-camera position="0 1.6 0" cursor="rayOrigin: mouse" look-controls="touchEnabled: true"
+                raycaster="objects: .clickable"></a-camera>
+            <!-- Motion Controllers -->
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+            <a-entity laser-controls="hand: right" line="color: #0FF"
+                raycaster="objects: .clickable; opacity: 0.9"></a-entity>
+        </a-entity>
+
+        <!-- Geometry -->
+        <a-cylinder material="side: double" position="0 -200.852 0" scale="1 319.122 1"></a-cylinder>
+
+        <!-- Elevator and Buttons -->
+        <a-gltf-model position="0 1.134 0" rotation="0 166.8 0" scale="1.726 1.726 1.726" src="#home_screen">
+            <a-entity id="myButton" class="clickable" geometry="depth: 0.05; height: 0.1; width: 0.2"
+                material="color: red" position="-0.22 -0.13 0.460"
+                animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color"
+                animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: red; type: color"
+                onclick="movePlayerAndElevator()"></a-entity>
+
+            <a-entity id="myButton-2" class="clickable" geometry="depth: 0.05; height: 0.1; width: 0.2"
+                material="color: red" position="-0.23 0.077 0.419"
+                animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color"
+                animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: red; type: color"
+                onclick="movePlayerAndElevator()"></a-entity>
+        </a-gltf-model>
+        <a-gltf-model position="0 0 -42.5" rotation="0 21.843 0" scale="8.436 8.436 8.436" src="#space"></a-gltf-model>
+
+        <!-- Rotating Sky -->
+        <a-sky src="#earth"
+            animation="property: rotation; loop:true; dur: 500000; from: 0 0 0; to: 0 360 0; easing: linear"></a-sky>
+    </a-scene>
+
+    <script>
+        function movePlayerAndElevator() {
+            const elevator = document.querySelector('#home_screen');
+            const camera = document.querySelector('#cameraRig');
+
+            // Animate the elevator
+            elevator.setAttribute('animation', {
+                property: 'position',
+                to: '0 10 0', // Move to y=10
+                dur: 5000, // Duration
+                easing: 'ease-in-out'
+            });
+
+            // Animate the camera to follow the elevator
+            camera.setAttribute('animation', {
+                property: 'position',
+                to: '0 11.6 0', // Move to y=11.6 (elevator height + player height)
+                dur: 5000, // Duration (matches elevator)
+                easing: 'ease-in-out'
+            });
+        }
+    </script>
+</body>
+
+</html>
