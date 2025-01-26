@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dynamic A-Frame Scenes</title>
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene cursor="rayOrigin: mouse">
+      <!-- Menu Buttons (Always Present) -->
+      <a-entity id="menu" position="0 1.6 -2">
+        <a-entity
+          id="elevatorButton"
+          geometry="primitive: plane; width: 1; height: 0.5"
+          material="color: gray"
+          position="0 0.6 0"
+          text="value: Elevator; align: center"
+        ></a-entity>
+        <a-entity
+          id="spaceButton"
+          geometry="primitive: plane; width: 1; height: 0.5"
+          material="color: blue"
+          position="0 0 0"
+          text="value: Space; align: center"
+        ></a-entity>
+        <a-entity
+          id="artGalleryButton"
+          geometry="primitive: plane; width: 1; height: 0.5"
+          material="color: purple"
+          position="0 -0.6 0"
+          text="value: Art Gallery; align: center"
+        ></a-entity>
+      </a-entity>
+
+      <!-- Initial Scene Content -->
+      <a-sky id="sky" color="#ECECEC"></a-sky>
+    </a-scene>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const scene = document.querySelector("a-scene");
+        const sky = document.querySelector("#sky");
+        const menu = document.querySelector("#menu");
+
+        // Define all scenes
+        const scenes = {
+          elevator: {
+            skyColor: "#555555",
+            content: `
+              <a-box position="0 0.5 -2" depth="2" height="2" width="2" color="gray"></a-box>
+              <a-text value="Inside the Elevator" position="0 2 -2" align="center"></a-text>
+            `,
+          },
+          space: {
+            skyColor: "black",
+            content: `
+              <a-sphere position="0 0 -5" radius="2" color="white"></a-sphere>
+              <a-text value="Welcome to Space!" position="0 2 -2" align="center" color="white"></a-text>
+            `,
+          },
+          artGallery: {
+            skyColor: "#FFFFFF",
+            content: `
+              <a-box position="0 0.5 -3" depth="1" height="1" width="1" color="red"></a-box>
+              <a-text value="Art Gallery" position="0 2 -2" align="center"></a-text>
+            `,
+          },
+        };
+
+        // Function to switch scenes dynamically
+        function loadScene(sceneKey) {
+          const selectedScene = scenes[sceneKey];
+          if (!selectedScene) return;
+
+          // Update the sky and scene content
+          sky.setAttribute("color", selectedScene.skyColor);
+          scene.innerHTML = menu.outerHTML; // Reset to menu
+          const contentContainer = document.createElement("a-entity");
+          contentContainer.innerHTML = selectedScene.content;
+          scene.appendChild(contentContainer);
+        }
+
+        // Event Listeners for Buttons
+        document.querySelector("#elevatorButton").addEventListener("click", () => loadScene("elevator"));
+        document.querySelector("#spaceButton").addEventListener("click", () => loadScene("space"));
+        document.querySelector("#artGalleryButton").addEventListener("click", () => loadScene("artGallery"));
+      });
+    </script>
+  </body>
+</html>
