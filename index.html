@@ -11,6 +11,7 @@
   cursor__xrselect="rayOrigin: xrselect"
   raycaster="objects:#objects *;">
     <a-assets>
+      <a-asset-item id="home_screen" src="/assets/Home Screen.glb"></a-asset-item>
     </a-assets>
     <!-- Camera w/ VR Controls -->
     <a-entity id="cameraRig" movement-controls="speed: 0.1">
@@ -23,19 +24,36 @@
       <a-entity laser-controls="hand: right" line="color: #0FF" raycaster="objects: .clickable; opacity: 0.9"></a-entity>
     </a-entity>
     <!-- Geometry -->
-    <a-entity id="myButton" class="clickable" geometry="primitive: box; width: 0.2; height: 0.1; depth: 0.05;"
-      material="color: red" position="0 1 -1" animation__mouseenter="property: components.material.material.color; type: color; to: blue; startEvents: mouseenter; dur: 500"
-      animation__mouseleave="property: components.material.material.color; type: color; to: red; startEvents: mouseleave; dur: 500"></a-entity>
+    <a-entity id="myButton" class="clickable" geometry="depth: 0.05; height: 0.1; width: 0.2" material="color: red" position="0.666 1.37 -0.855" animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color" animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: red; type: color"></a-entity>
+
+    <a-entity id="myButton-2" class="clickable" geometry="depth: 0.05; height: 0.1; width: 0.2" material="color: red" position="0.666 1.082 -0.855" animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color" animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: red; type: color"></a-entity>
+
+      <a-gltf-model src="#home_screen" gltf-model="/assets/Home Screen.glb" position="0 247.75 0" scale="1.88 2.21102 1.88" rotation="0 185.84000000000003 0"></a-gltf-model>
 
     <a-plane rotation="-90 0 0" width="100" height="100" color="#7BC8A4"></a-plane>
   </a-scene>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const myButton = document.querySelector('#myButton');
-      myButton.addEventListener('click', () => {
-        console.log('Button clicked!');
-        // Trigger whatever action you need
-      });
+      const box = document.querySelector("#myBox");
+
+        // Add a click event listener to the box
+        box.addEventListener("click", () => {
+          // Create a text entity dynamically
+          const message = document.createElement("a-entity");
+          message.setAttribute("text", {
+            value: "I've been clicked!",
+            align: "center",
+            width: 2,
+            color: "black",
+          });
+          message.setAttribute("position", "0 2 -2"); // Position the text above the box
+          document.querySelector("a-scene").appendChild(message);
+
+          // Optional: Remove the message after 3 seconds
+          setTimeout(() => {
+            message.parentNode.removeChild(message);
+          }, 3000);
+        });
     });
   </script>
 
