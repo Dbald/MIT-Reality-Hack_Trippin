@@ -18,10 +18,12 @@
       <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
       <!-- Right -->
       <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
-      <a-entity laser-controls="hand: right"></a-entity>
+      <a-entity laser-controls="hand: right" raycaster="objects: .clickable"></a-entity>
     </a-entity>
     <!-- Geometry -->
-    <a-entity id="myButton" geometry="primitive: box; width: 0.2; height: 0.1; depth: 0.05;" material="color: red"
+    <a-entity id="myButton" 
+    class="clickable"
+    geometry="primitive: box; width: 0.2; height: 0.1; depth: 0.05;" material="color: red"
       position="0 1 -1" event-set__enter="_event: mouseenter; material.color: green"
       event-set__leave="_event: mouseleave; material.color: red"></a-entity>
 
