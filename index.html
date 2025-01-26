@@ -1,22 +1,42 @@
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  </head>
-  <body>
-    <a-scene>
-      <a-assets>
-      </a-assets>
-       <!-- Camera w/ VR Controls -->
-      <a-entity id="cameraRig" movement-controls>
-        <a-camera></a-camera>
-        <!-- Motion Controllers -->
-        <!-- Left -->
-        <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
-        <!-- Right -->
-        <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
-      </a-entity>
-      <!-- Geometry -->
-      <a-box position="0 2 5" color="red"></a-box>
-    </a-scene>
-  </body>
+
+<head>
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
+
+</head>
+
+<body>
+  <a-scene>
+    <a-assets>
+    </a-assets>
+    <!-- Camera w/ VR Controls -->
+    <a-entity id="cameraRig" movement-controls="speed: 0.1">
+      <a-camera look-controls="touchEnabled: true"></a-camera>
+      <!-- Motion Controllers -->
+      <!-- Left -->
+      <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+      <!-- Right -->
+      <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+      <a-entity laser-controls="hand: right"></a-entity>
+    </a-entity>
+    <!-- Geometry -->
+    <a-entity id="myButton" geometry="primitive: box; width: 0.2; height: 0.1; depth: 0.05;" material="color: red"
+      position="0 1 -1" event-set__enter="_event: mouseenter; material.color: green"
+      event-set__leave="_event: mouseleave; material.color: red"></a-entity>
+
+    <a-plane rotation="-90 0 0" width="100" height="100" color="#7BC8A4"></a-plane>
+  </a-scene>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const myButton = document.querySelector('#myButton');
+      myButton.addEventListener('click', () => {
+        console.log('Button clicked!');
+        // Trigger whatever action you need
+      });
+    });
+  </script>
+
+</body>
+
 </html>
