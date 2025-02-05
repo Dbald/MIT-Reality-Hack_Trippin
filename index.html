@@ -11,56 +11,37 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script> -->
   </head>
   <body>
-    <a-scene>
-      <!--
-        1. Set up the camera rig. The camera is usually placed at 1.6 meters high to simulate eye level.
-        2. In desktop mode, you can use a mouse cursor. In VR mode (e.g., on the Meta Quest), the controllers take over.
-      -->
+    <a-scene cursor__mouse="rayOrigin: mouse" cursor__xrselect="rayOrigin: xrselect" raycaster="objects:#objects *;">
+        <!-- <a-assets>
+            <a-asset-item id="home_screen" src=""></a-asset-item>
+            <a-asset-item id="space" src="/assets/astrocrib_test.glb"></a-asset-item>
+            <img id="earth" src="/img/RenderCrate-HDRI_Orbital_68_prev_lg.jpg" />
+            <a-asset-item id="statue" src="/assets/statue.glb"></a-asset-item>
+        </a-assets> -->
 
         <!-- Camera w/ VR Controls -->
         <a-entity id="cameraRig" movement-controls="speed: 0.1" >
             <a-camera id="cam1" position="0 -200.134 0" cursor="rayOrigin: mouse" animation="property: position; to: 0 1 0; dur: 5000" look-controls="touchEnabled: true"
                 raycaster="objects: .clickable"></a-camera>
             <!-- Motion Controllers -->
-            <a-entity id="leftHand" oculus-touch-controls="hand: left; model:true" super-hands></a-entity>
-            <a-entity id="rightHand" oculus-touch-controls="hand: right; model:true" super-hands></a-entity>
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+            <a-entity laser-controls="hand: right" line="color: #0FF"
+                raycaster="objects: .clickable; opacity: 0.9"></a-entity>
+        </a-entity>
+        <!-- Secondary Camera -->
+        <a-entity id="cameraRig2" movement-controls="speed: 0.1" >
+            <a-camera id="cam2" camera="active: false" position="0 8.094 -38.377" rotation="0 -190.79 0" cursor="rayOrigin: mouse" look-controls="touchEnabled: true"
+                raycaster="objects: .clickable"></a-camera>
+            <!-- Motion Controllers -->
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
             <a-entity laser-controls="hand: right" line="color: #0FF"
                 raycaster="objects: .clickable; opacity: 0.9"></a-entity>
         </a-entity>
 
-      <!--
-        2. Add VR controllers.
-        
-        You can use either the generic "hand-controls" (which loads a default model) or
-        "oculus-touch-controls" which is tailored for the Oculus (Meta Quest) controllers.
-        Here we use oculus-touch-controls along with super-hands for grab interactions.
-      -->
-      
-
-      <!--
-        3. Create a grabbable object.
-        
-        Adding the "grabbable" component (provided by super-hands) makes this box interactable.
-        The optional "dynamic-body" (from the physics system) lets it behave like a physics object.
-        (Uncomment the physics script above and add this attribute if you wish to use physics.)
-      -->
-      <a-box id="box"
-             position="0 1 -3"
-             rotation="0 45 0"
-             color="#4CC3D9"
-             depth="0.5" height="0.5" width="0.5"
-             grabbable
-             
-             ></a-box>
-
-      <!--
-        4. Create a clickable/selectable button.
-        
-        This entity uses a simple plane geometry and listens to mouse (or controller) events.
-        The "event-set" components change its color or scale on hover/click.
-        In VR, your controllers’ raycasters (or even a built-in cursor) can trigger these events.
-      -->
-      <a-entity id="button"
+        <!-- Geometry -->
+        <a-entity id="button"
                 geometry="primitive: plane; height: 0.3; width: 0.6"
                 material="color: #FAFAFA; shader: flat"
                 position="1 1 -2"
@@ -70,16 +51,45 @@
                 event-set__click="_event: click; scale: 1.2 1.2 1.2">
       </a-entity>
 
-      <!--
-        5. (Optional) Adding a laser ray for controller pointing.
+      <a-box id="box"
+             position="0 1 -3"
+             rotation="0 45 0"
+             color="#4CC3D9"
+             depth="0.5" height="0.5" width="0.5"
+             grabbable
+             ></a-box>
+
         
-        This helps you see where the controller is “pointing” in VR mode.
-        You can add this to your controllers using the "laser-controls" component.
-        Alternatively, if you want to stick with the super-hands grabbing, you may skip this.
-      -->
-      
-      <!-- <a-entity laser-controls="hand: right"></a-entity> -->
-     
+
+        <!-- Gallery -->
+        
+
+        <!-- Rotating Sky -->
+        <a-sky src="#earth"
+            animation="property: rotation; loop:true; dur: 500000; from: 0 0 0; to: 0 360 0; easing: linear"></a-sky>
     </a-scene>
-  </body>
+
+    <script>
+        // function switchCameras() {
+        //     const camera1 = document.querySelector('#cam1');
+        //     const camera2 = document.querySelector('#cam2');
+
+        //     // Toggle the 'active' attribute
+        //     if (camera1.getAttribute('camera').active) {
+        //         camera1.setAttribute('camera', 'active', false);
+        //         camera1.setAttribute('look-controls', 'enabled', false);
+
+        //         camera2.setAttribute('camera', 'active', true);
+        //         camera2.setAttribute('look-controls', 'enabled', true);
+        //     } else {
+        //         camera2.setAttribute('camera', 'active', false);
+        //         camera2.setAttribute('look-controls', 'enabled', false);
+
+        //         camera1.setAttribute('camera', 'active', true);
+        //         camera1.setAttribute('look-controls', 'enabled', true);
+        //     }
+        // }
+    </script>
+</body>
+
 </html>
