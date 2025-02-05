@@ -1,90 +1,88 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Dynamic A-Frame Scenes</title>
-    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
-  </head>
-  <body>
-    <a-scene cursor="rayOrigin: mouse">
-      <!-- Menu Buttons (Always Present) -->
-      <a-entity id="menu" position="0 1.6 -2">
-        <a-entity
-          id="elevatorButton"
-          geometry="primitive: plane; width: 1; height: 0.5"
-          material="color: gray"
-          position="0 0.6 0"
-          text="value: Elevator; align: center"
-        ></a-entity>
-        <a-entity
-          id="spaceButton"
-          geometry="primitive: plane; width: 1; height: 0.5"
-          material="color: blue"
-          position="0 0 0"
-          text="value: Space; align: center"
-        ></a-entity>
-        <a-entity
-          id="artGalleryButton"
-          geometry="primitive: plane; width: 1; height: 0.5"
-          material="color: purple"
-          position="0 -0.6 0"
-          text="value: Art Gallery; align: center"
-        ></a-entity>
-      </a-entity>
 
-      <!-- Initial Scene Content -->
-      <a-sky id="sky" color="#ECECEC"></a-sky>
+<head>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+    <a-scene cursor__mouse="rayOrigin: mouse" cursor__xrselect="rayOrigin: xrselect" raycaster="objects:#objects *;">
+        <a-assets>
+            <a-asset-item id="home_screen" src=""></a-asset-item>
+            <a-asset-item id="space" src="/assets/astrocrib_test.glb"></a-asset-item>
+            <img id="earth" src="/img/RenderCrate-HDRI_Orbital_68_prev_lg.jpg" />
+            <a-asset-item id="statue" src="/assets/statue.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Camera w/ VR Controls -->
+        <a-entity id="cameraRig" movement-controls="speed: 0.1" >
+            <a-camera id="cam1" position="0 -200.134 0" cursor="rayOrigin: mouse" animation="property: position; to: 0 1 0; dur: 5000" look-controls="touchEnabled: true"
+                raycaster="objects: .clickable"></a-camera>
+            <!-- Motion Controllers -->
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+            <a-entity laser-controls="hand: right" line="color: #0FF"
+                raycaster="objects: .clickable; opacity: 0.9"></a-entity>
+        </a-entity>
+        <!-- Secondary Camera -->
+        <a-entity id="cameraRig2" movement-controls="speed: 0.1" >
+            <a-camera id="cam2" camera="active: false" position="0 8.094 -38.377" rotation="0 -190.79 0" cursor="rayOrigin: mouse" look-controls="touchEnabled: true"
+                raycaster="objects: .clickable"></a-camera>
+            <!-- Motion Controllers -->
+            <a-entity oculus-touch-controls="hand: left; model:true"></a-entity>
+            <a-entity oculus-touch-controls="hand: right; model:true"></a-entity>
+            <a-entity laser-controls="hand: right" line="color: #0FF"
+                raycaster="objects: .clickable; opacity: 0.9"></a-entity>
+        </a-entity>
+
+        <!-- Geometry -->
+        <a-cylinder material="side: double" position="0 -200.852 0" scale="1 319.122 1"></a-cylinder>
+
+        <!-- Elevator and Buttons -->
+        <a-gltf-model elevator position="0 -200.134 0" rotation="0 166.8 0" scale="1.726 1.726 1.726" src="#home_screen" animation="property: position; to: 0 1 0; dur: 5000">
+            <a-light></a-light>
+            <a-entity id="myButton" class="clickable" geometry="cylinder"
+                material="color: black" position="-0.22 -0.13 0.460"
+                animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color"
+                animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: black; type: color" onclick="switchCameras()"></a-entity>
+
+            <a-entity id="myButton-2" class="clickable" geometry="depth: 0.05; height: 0.1; width: 0.2"
+                material="color: red" position="-0.23 0.077 0.419"
+                animation__mouseenter="dur: 500; property: components.material.material.color; startEvents: mouseenter; to: blue; type: color"
+                animation__mouseleave="dur: 500; property: components.material.material.color; startEvents: mouseleave; to: red; type: color"></a-entity>
+        </a-gltf-model>
+
+        <!-- Gallery -->
+        <!-- <a-gltf-model position="0 0 -42.5" rotation="0 21.843 0" scale="11.436 11.436 11.436" src="#space"></a-gltf-model>
+        <a-gltf-model position="3.9 7.6 -29.49" rotation="0 153.88 0" scale="2 2 2" src="#statue"></a-gltf-model> -->
+
+        <!-- Rotating Sky -->
+        <a-sky src="#earth"
+            animation="property: rotation; loop:true; dur: 500000; from: 0 0 0; to: 0 360 0; easing: linear"></a-sky>
     </a-scene>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const scene = document.querySelector("a-scene");
-        const sky = document.querySelector("#sky");
-        const menu = document.querySelector("#menu");
+        function switchCameras() {
+            const camera1 = document.querySelector('#cam1');
+            const camera2 = document.querySelector('#cam2');
 
-        // Define all scenes
-        const scenes = {
-          elevator: {
-            skyColor: "#555555",
-            content: `
-              <a-box position="0 0.5 -2" depth="2" height="2" width="2" color="gray"></a-box>
-              <a-text value="Inside the Elevator" position="0 2 -2" align="center"></a-text>
-            `,
-          },
-          space: {
-            skyColor: "black",
-            content: `
-              <a-sphere position="0 0 -5" radius="2" color="white"></a-sphere>
-              <a-text value="Welcome to Space!" position="0 2 -2" align="center" color="white"></a-text>
-            `,
-          },
-          artGallery: {
-            skyColor: "#FFFFFF",
-            content: `
-              <a-box position="0 0.5 -3" depth="1" height="1" width="1" color="red"></a-box>
-              <a-text value="Art Gallery" position="0 2 -2" align="center"></a-text>
-            `,
-          },
-        };
+            // Toggle the 'active' attribute
+            if (camera1.getAttribute('camera').active) {
+                camera1.setAttribute('camera', 'active', false);
+                camera1.setAttribute('look-controls', 'enabled', false);
 
-        // Function to switch scenes dynamically
-        function loadScene(sceneKey) {
-          const selectedScene = scenes[sceneKey];
-          if (!selectedScene) return;
+                camera2.setAttribute('camera', 'active', true);
+                camera2.setAttribute('look-controls', 'enabled', true);
+            } else {
+                camera2.setAttribute('camera', 'active', false);
+                camera2.setAttribute('look-controls', 'enabled', false);
 
-          // Update the sky and scene content
-          sky.setAttribute("color", selectedScene.skyColor);
-          scene.innerHTML = menu.outerHTML; // Reset to menu
-          const contentContainer = document.createElement("a-entity");
-          contentContainer.innerHTML = selectedScene.content;
-          scene.appendChild(contentContainer);
+                camera1.setAttribute('camera', 'active', true);
+                camera1.setAttribute('look-controls', 'enabled', true);
+            }
         }
-
-        // Event Listeners for Buttons
-        document.querySelector("#elevatorButton").addEventListener("click", () => loadScene("elevator"));
-        document.querySelector("#spaceButton").addEventListener("click", () => loadScene("space"));
-        document.querySelector("#artGalleryButton").addEventListener("click", () => loadScene("artGallery"));
-      });
     </script>
-  </body>
+</body>
+
 </html>
