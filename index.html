@@ -12,7 +12,7 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script> -->
   </head>
   <body>
-    <a-scene cursor__mouse="rayOrigin: mouse" cursor__xrselect="rayOrigin: xrselect" raycaster="objects:#objects *;" physics="gravity: -9.8">
+    <a-scene cursor__mouse="rayOrigin: mouse" cursor__xrselect="rayOrigin: xrselect" raycaster="objects:#objects *;">
         <a-assets>
             <!-- <a-asset-item id="home_screen" src=""></a-asset-item> -->
             <!-- <a-asset-item id="space" src="/assets/astrocrib_test.glb"></a-asset-item> -->
@@ -57,16 +57,14 @@
              rotation="0 45 0"
              color="#4CC3D9"
              depth="0.5" height="0.5" width="0.5"
-             grabbable
-             dynamic-body></a-box>
+             grabbable></a-box>
 
         
 
         <!-- Gallery -->
         <a-plane rotation="-90 0 0"
                width="100" height="100"
-               color="#7BC8A4"
-               static-body></a-plane>
+               color="#7BC8A4"></a-plane>
 
         <!-- Rotating Sky -->
         <a-sky src="#earth"
