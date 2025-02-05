@@ -16,9 +16,17 @@
         1. Set up the camera rig. The camera is usually placed at 1.6 meters high to simulate eye level.
         2. In desktop mode, you can use a mouse cursor. In VR mode (e.g., on the Meta Quest), the controllers take over.
       -->
-      <a-entity id="cameraRig" position="0 1.6 0">
-        <a-camera></a-camera>
-      </a-entity>
+
+        <!-- Camera w/ VR Controls -->
+        <a-entity id="cameraRig" movement-controls="speed: 0.1" >
+            <a-camera id="cam1" position="0 -200.134 0" cursor="rayOrigin: mouse" animation="property: position; to: 0 1 0; dur: 5000" look-controls="touchEnabled: true"
+                raycaster="objects: .clickable"></a-camera>
+            <!-- Motion Controllers -->
+            <a-entity id="leftHand" oculus-touch-controls="hand: left; model:true" super-hands></a-entity>
+            <a-entity id="rightHand" oculus-touch-controls="hand: right; model:true" super-hands></a-entity>
+            <a-entity laser-controls="hand: right" line="color: #0FF"
+                raycaster="objects: .clickable; opacity: 0.9"></a-entity>
+        </a-entity>
 
       <!--
         2. Add VR controllers.
@@ -27,8 +35,7 @@
         "oculus-touch-controls" which is tailored for the Oculus (Meta Quest) controllers.
         Here we use oculus-touch-controls along with super-hands for grab interactions.
       -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left" super-hands></a-entity>
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" super-hands></a-entity>
+      
 
       <!--
         3. Create a grabbable object.
@@ -71,7 +78,7 @@
         Alternatively, if you want to stick with the super-hands grabbing, you may skip this.
       -->
       
-      <a-entity laser-controls="hand: right"></a-entity>
+      <!-- <a-entity laser-controls="hand: right"></a-entity> -->
      
     </a-scene>
   </body>
