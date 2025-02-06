@@ -11,6 +11,8 @@
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
     <!-- Event Set Component (needed for event-set__enter, etc.) -->
     <script src="https://unpkg.com/aframe-event-set-component/dist/aframe-event-set-component.min.js"></script>
+    <!-- Physics Engine -->
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
   </head>
   <body>
     <script>
@@ -35,7 +37,7 @@
         }
       });
     </script>
-    <a-scene physics="debug: false">
+    <a-scene physics="debug: true" stats>
       <a-assets>
         <img id="earth" src="/img/RenderCrate-HDRI_Orbital_68_prev_lg.jpg" />
       </a-assets>
@@ -82,6 +84,8 @@
              grabbable
              dynamic-body>
       </a-box>
+
+      <a-box static-body position="0 0.5 -5" width="3" height="1" depth="1"></a-box>
 
       <!-- Ground/Gallery -->
       <a-plane rotation="-90 0 0"
